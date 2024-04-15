@@ -40,6 +40,7 @@ export class AnimalsService {
 
   async find(id: string): Promise<AnimalDetailsDbo | null> {
     const database = await this.getDatabase();
+    // TODO: use aggregation to map shelterId into shelter object
     const collection = database.collection<AnimalDetailsDbo>('animals');
     return collection.findOne({ _id: new ObjectId(id) });
   }

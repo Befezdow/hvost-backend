@@ -1,24 +1,46 @@
-import { ObjectId } from 'mongodb';
+import { Binary, ObjectId } from 'mongodb';
 
 export class NewAnimalDbo {
-  name: string;
+  nickname: string;
+  gender: string;
+  species: string;
+  minBirthDate: Date;
+  maxBirthDate: Date;
+  breed: string;
+  color: string;
+  size: string;
   description: string;
-  questions: Array<{
-    text: string;
-    options: Array<{
-      id: number;
-      text: string;
-    }>;
-    answer: number;
-  }>;
+  photos: Array<Binary>;
+  shelterId: ObjectId;
 }
 
-export class AnimalDetailsDbo extends NewAnimalDbo {
+export class AnimalDetailsDbo {
   _id: ObjectId;
+  nickname: string;
+  gender: string;
+  species: string;
+  minBirthDate: Date;
+  maxBirthDate: Date;
+  breed: string;
+  color: string;
+  size: string;
+  description: string;
+  photos: Array<Binary>;
+  shelter: {
+    id: ObjectId;
+    name: string;
+    address: string;
+    phoneNumber: string;
+    email: string;
+    links: Array<string>;
+  };
 }
 
 export class AnimalListDbo {
   _id: ObjectId;
-  name: string;
-  description: string;
+  nickname: string;
+  photo: Binary;
+  gender: string;
+  minBirthDate: Date;
+  maxBirthDate: Date;
 }

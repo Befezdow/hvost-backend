@@ -9,12 +9,8 @@ import {
   Post,
   Res,
 } from '@nestjs/common';
-import {
-  AnimalDetailsDto,
-  ApiError,
-  AnimalListDto,
-  NewAnimalDto,
-} from './animals.dto';
+import { ApiError } from 'src/types';
+import { AnimalDetailsDto, AnimalListDto, NewAnimalDto } from './animals.dto';
 import { AnimalsService } from './animals.service';
 import {
   newAnimalDtoToDbo,
