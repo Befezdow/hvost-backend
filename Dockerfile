@@ -1,0 +1,66 @@
+#######################
+# BUILD FOR LOCAL DEVELOPMENT
+#######################
+
+# Base image
+FROM node:18-alpine As development
+
+# Create app directory
+WORKDIR /usr/src/app
+
+# A wildcard is used to ensure both package.json and package-lock.json are copied
+COPY --chown=node:node package*.json ./
+
+# Install app dependencies
+RUN npm ci
+
+# Bundle app source
+COPY --chown=node:node . .
+
+# Use the node user from the image instead of the root user
+USER node
+
+#######################
+# BUILD FOR LOCAL DEVELOPMENT
+#######################
+
+# Base image
+FROM node:18-alpine As build
+
+# Create app directory
+WORKDIR /usr/src/app
+
+# A wildcard is used to ensure both package.json and package-lock.json are copied
+COPY --chown=node:node package*.json ./
+
+# In order to run 'npm run build' we need access to the Nest CLI which is a dev devependency.
+# In the previous development stage we ran 'npm ci' which installed all dependencies,
+# so we can copy over the node_modules directory from the development image
+COPY --chown=node:node --from=development /usr/src/app/node_modules ./node_modules
+
+# Bundle app source
+COPY --chown=node:node . .
+
+# Creates a "dist" folder with the production build
+RUN npm run build
+
+# Set NODE_ENV environment variable
+ENV NODE_ENV production
+
+RUN npm ci --only=production && npm cache clean --force
+
+USER node
+
+#######################
+# PRODUCTION
+#######################
+
+# Base image
+FROM node:18-alpine As production
+
+# Copy the bundled code from the build stage to the producton image
+COPY --chown=node:node --from=build /usr/src/app/node_modules ./node_modules
+COPY --chown=node:node --from=build /usr/src/app/dist ./dist
+
+# Start the server using production build
+CMD ["node", "dist/main.js"]
