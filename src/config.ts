@@ -3,4 +3,5 @@ export const config = {
   mongoURI: 'mongodb://localhost:27018',
   mongoDatabase: 'hvost',
   animalsCollection: 'animals',
+  sheltersCollection: 'shelters',
 };

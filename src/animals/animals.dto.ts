@@ -53,8 +53,18 @@ export class AnimalDetailsDto {
 export class AnimalListDto {
   id: string;
   nickname: string;
-  photo: string;
+  photos: Array<string>;
   gender: Gender;
   minBirthDate: string;
   maxBirthDate: string;
+}
+
+export class AnimalListRequestDto {
+  offset?: number;
+  limit?: number;
+}
+
+export class AnimalListResponseDto {
+  totalAmount: number;
+  list: Array<AnimalListDto>;
 }

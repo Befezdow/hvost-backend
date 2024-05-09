@@ -1,5 +1,10 @@
 import { MongoClient, Db, ObjectId } from 'mongodb';
-import { NewAnimalDbo, AnimalDetailsDbo, AnimalListDbo } from './animals.dbo';
+import {
+  NewAnimalDbo,
+  AnimalDetailsDbo,
+  AnimalListDbo,
+  UpdateAnimalDbo,
+} from './animals.dbo';
 import { config } from '../config';
 
 export class AnimalsService {
@@ -38,22 +43,100 @@ export class AnimalsService {
     return this._database!;
   }
 
-  async find(id: string): Promise<AnimalDetailsDbo | null> {
+  async findById(id: string): Promise<AnimalDetailsDbo | null> {
     const database = await this.getDatabase();
-    // TODO: use aggregation to map shelterId into shelter object
     const collection = database.collection<AnimalDetailsDbo>('animals');
-    return collection.findOne({ _id: new ObjectId(id) });
+
+    const aggregationPipeline = [
+      {
+        $match: { _id: new ObjectId(id) },
+      },
+      {
+        $lookup: {
+          from: 'shelters',
+          localField: 'shelterId',
+          foreignField: '_id',
+          as: 'shelters',
+        },
+      },
+      {
+        $addFields: {
+          shelter: {
+            $first: '$shelters',
+          },
+        },
+      },
+      {
+        $project: {
+          nickname: true,
+          gender: true,
+          species: true,
+          minBirthDate: true,
+          maxBirthDate: true,
+          breed: true,
+          color: true,
+          size: true,
+          description: true,
+          photos: true,
+          shelter: {
+            id: '$shelter._id',
+            name: '$shelter.name',
+            address: '$shelter.address',
+            phoneNumber: '$shelter.phoneNumber',
+            email: '$shelter.email',
+            links: '$shelter.links',
+          },
+        },
+      },
+    ];
+    const aggregationResult = await collection
+      .aggregate<AnimalDetailsDbo>(aggregationPipeline)
+      .toArray();
+    if (aggregationResult.length === 0) {
+      return null;
+    }
+
+    return aggregationResult[0];
   }
 
-  async findAll(): Promise<AnimalListDbo[]> {
+  async findAll(offset?: number, limit?: number): Promise<AnimalListDbo[]> {
     const database = await this.getDatabase();
     const collection = database.collection<AnimalListDbo>('animals');
-    return collection.find({}).toArray();
+    let cursor = collection.find();
+    if (offset != null) {
+      cursor = cursor.skip(offset);
+    }
+    if (limit != null) {
+      cursor = cursor.limit(limit);
+    }
+    return cursor.toArray();
+  }
+
+  async totalAmount(): Promise<number> {
+    const database = await this.getDatabase();
+    const collection = database.collection<AnimalListDbo>('animals');
+    return collection.countDocuments();
   }
 
   async create(data: NewAnimalDbo): Promise<string> {
     const database = await this.getDatabase();
     const collection = database.collection<NewAnimalDbo>('animals');
     return (await collection.insertOne(data)).insertedId.toString();
+  }
+
+  async deleteById(id: string): Promise<boolean> {
+    const database = await this.getDatabase();
+    const collection = database.collection<AnimalDetailsDbo>('animals');
+    const result = await collection.deleteOne({ _id: new ObjectId(id) });
+    return result.deletedCount !== 0;
+  }
+
+  async update(id: string, data: UpdateAnimalDbo): Promise<void> {
+    const database = await this.getDatabase();
+    const collection = database.collection<AnimalDetailsDbo>('animals');
+    const result = await collection.updateOne({ _id: new ObjectId(id) }, data);
+    if (result.modifiedCount === 0) {
+      throw new Error(`The animal with id ${id} not found`);
+    }
   }
 }

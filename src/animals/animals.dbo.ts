@@ -14,6 +14,20 @@ export class NewAnimalDbo {
   shelterId: ObjectId;
 }
 
+export class UpdateAnimalDbo {
+  nickname?: string;
+  gender?: string;
+  species?: string;
+  minBirthDate?: Date;
+  maxBirthDate?: Date;
+  breed?: string;
+  color?: string;
+  size?: string;
+  description?: string;
+  photos?: Array<Binary>;
+  shelterId?: ObjectId;
+}
+
 export class AnimalDetailsDbo {
   _id: ObjectId;
   nickname: string;
@@ -39,7 +53,7 @@ export class AnimalDetailsDbo {
 export class AnimalListDbo {
   _id: ObjectId;
   nickname: string;
-  photo: Binary;
+  photos: Array<Binary>;
   gender: string;
   minBirthDate: Date;
   maxBirthDate: Date;

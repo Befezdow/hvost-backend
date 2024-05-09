@@ -2,7 +2,6 @@ import { Response } from 'express';
 import {
   Body,
   Controller,
-  Delete,
   Get,
   HttpCode,
   HttpStatus,
@@ -11,35 +10,35 @@ import {
   Res,
 } from '@nestjs/common';
 import { ApiError } from 'src/types';
+import { SheltersService } from './shelters.service';
 import {
-  AnimalDetailsDto,
-  AnimalListRequestDto,
-  AnimalListResponseDto,
-  NewAnimalDto,
-} from './animals.dto';
-import { AnimalsService } from './animals.service';
+  NewShelterDto,
+  ShelterDetailsDto,
+  ShelterListRequestDto,
+  ShelterListResponseDto,
+} from './shelters.dto';
 import {
-  newAnimalDtoToDbo,
-  animalDetailsDboToDto,
-  animalListDboToDto,
-} from './animals.mapper';
+  newShelterDtoToDbo,
+  shelterDetailsDboToDto,
+  shelterListDboToDto,
+} from './shelters.mapper';
 
-@Controller('animals')
-export class AnimalsController {
-  constructor(private animalsService: AnimalsService) {}
+@Controller('shelters')
+export class SheltersController {
+  constructor(private sheltersService: SheltersService) {}
 
   @Post()
   @HttpCode(200)
   async findAll(
-    @Body() requestDto: AnimalListRequestDto,
+    @Body() requestDto: ShelterListRequestDto,
     @Res() response: Response,
-  ): Promise<Response<AnimalListResponseDto | ApiError>> {
+  ): Promise<Response<ShelterListResponseDto | ApiError>> {
     let rawResult;
     let totalAmount;
     try {
       const { offset, limit } = requestDto;
-      rawResult = await this.animalsService.findAll(offset, limit);
-      totalAmount = await this.animalsService.totalAmount();
+      rawResult = await this.sheltersService.findAll(offset, limit);
+      totalAmount = await this.sheltersService.totalAmount();
     } catch (err) {
       console.log(err);
       return response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
@@ -48,9 +47,9 @@ export class AnimalsController {
       });
     }
 
-    const result: AnimalListResponseDto = {
+    const result: ShelterListResponseDto = {
       totalAmount,
-      list: rawResult.map((elem) => animalListDboToDto(elem)),
+      list: rawResult.map((elem) => shelterListDboToDto(elem)),
     };
 
     console.log('findAll :: ', result);
@@ -63,10 +62,10 @@ export class AnimalsController {
   async findOne(
     @Param('id') id: string,
     @Res() response: Response,
-  ): Promise<Response<AnimalDetailsDto | ApiError>> {
+  ): Promise<Response<ShelterDetailsDto | ApiError>> {
     let rawResult;
     try {
-      rawResult = await this.animalsService.findById(id);
+      rawResult = await this.sheltersService.findById(id);
     } catch (err) {
       console.log(err);
 
@@ -77,7 +76,7 @@ export class AnimalsController {
     }
 
     if (rawResult !== null) {
-      const result = animalDetailsDboToDto(rawResult);
+      const result = shelterDetailsDboToDto(rawResult);
 
       console.log('findOne :: ', result);
 
@@ -86,20 +85,20 @@ export class AnimalsController {
 
     return response.status(HttpStatus.BAD_REQUEST).json({
       status: HttpStatus.BAD_REQUEST,
-      message: 'Unknown animal ID',
+      message: 'Unknown shelter ID',
     });
   }
 
   @Post()
   @HttpCode(200)
   async createOne(
-    @Body() newAnimalDto: NewAnimalDto,
+    @Body() newShelterDto: NewShelterDto,
     @Res() response: Response,
   ): Promise<Response<{ id: string } | ApiError>> {
     let id;
     try {
-      const newAnimalDbo = newAnimalDtoToDbo(newAnimalDto);
-      id = await this.animalsService.create(newAnimalDbo);
+      const newShelterDbo = newShelterDtoToDbo(newShelterDto);
+      id = await this.sheltersService.create(newShelterDbo);
     } catch (err) {
       console.log(err);
       return response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
@@ -113,35 +112,5 @@ export class AnimalsController {
     console.log('createOne :: ', result);
 
     return response.status(HttpStatus.OK).json(result);
-  }
-
-  @Delete(':id')
-  @HttpCode(200)
-  async deleteOne(
-    @Param('id') id: string,
-    @Res() response: Response,
-  ): Promise<Response<Record<string, never> | ApiError>> {
-    let success;
-    try {
-      success = await this.animalsService.deleteById(id);
-    } catch (err) {
-      console.log(err);
-
-      return response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
-        status: HttpStatus.INTERNAL_SERVER_ERROR,
-        message: 'Internal server error',
-      });
-    }
-
-    if (!success) {
-      return response.status(HttpStatus.BAD_REQUEST).json({
-        status: HttpStatus.BAD_REQUEST,
-        message: 'Unknown animal ID',
-      });
-    }
-
-    console.log('deleteOne', id);
-
-    return response.status(HttpStatus.OK).json({});
   }
 }

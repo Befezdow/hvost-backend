@@ -39,7 +39,7 @@ export function animalListDboToDto(data: AnimalListDbo): AnimalListDto {
   return {
     id: data._id.toString(),
     nickname: data.nickname,
-    photo: data.photo.toString('base64'),
+    photos: data.photos.map((elem) => elem.toString('base64')),
     gender: data.gender as Gender,
     minBirthDate: data.minBirthDate.toISOString(),
     maxBirthDate: data.maxBirthDate.toISOString(),
