@@ -69,7 +69,7 @@ Response body:
 
 ## Get one animal
 
-Method: `/animals/ANIMAL_ID`
+Method: `GET /animals/ANIMAL_ID`
 
 Response body:
 ```typescript
@@ -96,20 +96,108 @@ Response body:
 }
 ```
 
-## Get all animals
+## Get animals list
 
-Method: `/animals`
+Method: `POST /animals`
+
+Request body:
+```typescript
+{
+  limit?: number;
+  offset?: number;
+}
+```
+
+Response body:
+```typescript
+{
+  totalAmount: number;
+  list: {
+    id: string;
+    nickname: string;
+    photo: string;
+    gender: 'BOY' | 'GIRL';
+    minBirthDate: string;
+    maxBirthDate: string;
+  }[];
+```
+
+## Delete one animal
+
+Method: `DELETE /animals/ANIMAL_ID`
+
+Response body:
+```typescript
+{}
+```
+
+## Create shelter
+
+Method: `POST /shelters`
+
+Request body:
+```typescript
+{
+  name: string;
+  description: string;
+  address: string;
+  phoneNumber: string;
+  email: string;
+  photos: Array<string>;
+  links: Array<string>;
+  login: string;
+  password: string;
+}
+```
 
 Response body:
 ```typescript
 {
   id: string;
-  nickname: string;
-  photo: string;
-  gender: 'BOY' | 'GIRL';
-  minBirthDate: string;
-  maxBirthDate: string;
-}[];
+}
+```
+
+## Get one shelter
+
+Method: `GET /shelters/SHELTER_ID`
+
+Response body:
+```typescript
+{
+  id: string;
+  name: string;
+  description: string;
+  address: string;
+  phoneNumber: string;
+  email: string;
+  photos: Array<string>;
+  links: Array<string>;
+}
+```
+
+## Get shelter list
+
+Method: `POST /shelters`
+
+Request body:
+```typescript
+{
+  limit?: number;
+  offset?: number;
+}
+```
+
+Response body:
+```typescript
+{
+  totalAmount: number;
+  list: {
+    id: string;
+    name: string;
+    address: string;
+    phoneNumber: string;
+    photos: Array<string>;
+  }[];
 ```
 
 # Stay in touch
