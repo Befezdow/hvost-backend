@@ -48,8 +48,8 @@ Method: `POST /auth/login`
 Request body:
 ```typescript
 {
-	login: string;
-	password: string;
+  login: string;
+  password: string;
 }
 ```
 
