@@ -4,6 +4,8 @@ import {
   AnimalDetailsDbo,
   AnimalListDbo,
   UpdateAnimalDbo,
+  AnimalListRequestDbo,
+  AnimalListFiltersDbo,
 } from './animals.dbo';
 import { config } from '../config';
 
@@ -99,10 +101,12 @@ export class AnimalsService {
     return aggregationResult[0];
   }
 
-  async findAll(offset?: number, limit?: number): Promise<AnimalListDbo[]> {
+  async findAll(params: AnimalListRequestDbo): Promise<AnimalListDbo[]> {
+    const { offset, limit, filters } = params;
     const database = await this.getDatabase();
     const collection = database.collection<AnimalListDbo>('animals');
-    let cursor = collection.find();
+
+    let cursor = collection.find(filters);
     if (offset != null) {
       cursor = cursor.skip(offset);
     }
@@ -112,10 +116,10 @@ export class AnimalsService {
     return cursor.toArray();
   }
 
-  async totalAmount(): Promise<number> {
+  async totalAmount(filters?: AnimalListFiltersDbo): Promise<number> {
     const database = await this.getDatabase();
     const collection = database.collection<AnimalListDbo>('animals');
-    return collection.countDocuments();
+    return collection.countDocuments(filters);
   }
 
   async create(data: NewAnimalDbo): Promise<string> {
@@ -124,10 +128,13 @@ export class AnimalsService {
     return (await collection.insertOne(data)).insertedId.toString();
   }
 
-  async deleteById(id: string): Promise<boolean> {
+  async deleteById(id: string, shelterId?: string): Promise<boolean> {
     const database = await this.getDatabase();
     const collection = database.collection<AnimalDetailsDbo>('animals');
-    const result = await collection.deleteOne({ _id: new ObjectId(id) });
+    const result = await collection.deleteOne({
+      _id: new ObjectId(id),
+      shelterId: shelterId ? new ObjectId(shelterId) : undefined,
+    });
     return result.deletedCount !== 0;
   }
 

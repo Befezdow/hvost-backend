@@ -5,5 +5,6 @@ import { SheltersService } from './shelters.service';
 @Module({
   controllers: [SheltersController],
   providers: [SheltersService],
+  exports: [SheltersService],
 })
 export class SheltersModule {}

@@ -22,11 +22,13 @@ import {
   shelterDetailsDboToDto,
   shelterListDboToDto,
 } from './shelters.mapper';
+import { Public } from 'src/auth/decorators/public.decorator';
 
 @Controller('shelters')
 export class SheltersController {
   constructor(private sheltersService: SheltersService) {}
 
+  @Public()
   @Post()
   @HttpCode(200)
   async findAll(
@@ -57,6 +59,7 @@ export class SheltersController {
     return response.status(HttpStatus.OK).json(result);
   }
 
+  @Public()
   @Get(':id')
   @HttpCode(200)
   async findOne(
@@ -89,6 +92,7 @@ export class SheltersController {
     });
   }
 
+  @Public()
   @Post()
   @HttpCode(200)
   async createOne(

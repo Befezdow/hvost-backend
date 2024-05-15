@@ -1,5 +1,11 @@
 import { Binary, ObjectId } from 'mongodb';
-import { NewAnimalDbo, AnimalDetailsDbo, AnimalListDbo } from './animals.dbo';
+import {
+  NewAnimalDbo,
+  AnimalDetailsDbo,
+  AnimalListDbo,
+  AnimalListRequestDbo,
+  AnimalListFiltersDbo,
+} from './animals.dbo';
 import {
   NewAnimalDto,
   AnimalDetailsDto,
@@ -7,6 +13,7 @@ import {
   Gender,
   Species,
   Size,
+  AnimalListRequestDto,
 } from './animals.dto';
 
 export function animalDetailsDboToDto(
@@ -46,7 +53,25 @@ export function animalListDboToDto(data: AnimalListDbo): AnimalListDto {
   };
 }
 
-export function newAnimalDtoToDbo(data: NewAnimalDto): NewAnimalDbo {
+export function animalListRequestDtoToDbo(
+  data: AnimalListRequestDto,
+): AnimalListRequestDbo {
+  const filters: AnimalListFiltersDbo = {};
+  if (data.filters?.shelterId) {
+    filters.shelterId = new ObjectId(data.filters?.shelterId);
+  }
+
+  return {
+    offset: data.offset,
+    limit: data.limit,
+    filters,
+  };
+}
+
+export function newAnimalDtoToDbo(
+  data: NewAnimalDto,
+  shelterId: string,
+): NewAnimalDbo {
   return {
     nickname: data.nickname,
     gender: data.gender as Gender,
@@ -58,6 +83,6 @@ export function newAnimalDtoToDbo(data: NewAnimalDto): NewAnimalDbo {
     size: data.size as Size,
     description: data.description,
     photos: data.photos.map((elem) => Binary.createFromBase64(elem)),
-    shelterId: new ObjectId(data.shelterId),
+    shelterId: new ObjectId(shelterId),
   };
 }

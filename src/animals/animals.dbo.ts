@@ -58,3 +58,13 @@ export class AnimalListDbo {
   minBirthDate: Date;
   maxBirthDate: Date;
 }
+
+export class AnimalListFiltersDbo {
+  shelterId?: ObjectId;
+}
+
+export class AnimalListRequestDbo {
+  offset?: number;
+  limit?: number;
+  filters: AnimalListFiltersDbo;
+}

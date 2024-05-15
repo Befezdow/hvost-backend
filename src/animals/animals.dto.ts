@@ -25,7 +25,6 @@ export class NewAnimalDto {
   size: Size;
   description: string;
   photos: Array<string>;
-  shelterId: string;
 }
 
 export class AnimalDetailsDto {
@@ -62,6 +61,9 @@ export class AnimalListDto {
 export class AnimalListRequestDto {
   offset?: number;
   limit?: number;
+  filters?: {
+    shelterId?: string;
+  };
 }
 
 export class AnimalListResponseDto {
