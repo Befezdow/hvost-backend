@@ -39,9 +39,49 @@ $ docker compose up
 
 # API methods
 
-## Create animal
+To call private (authorized) methods, the Bearer token is used.
 
-Method: `POST /animals`
+## Authorization by credentials
+
+Method: `POST /auth/login`
+
+Request body:
+```typescript
+{
+	login: string;
+	password: string;
+}
+```
+
+Response body:
+```typescript
+{
+  accessToken: string;
+  expiresAt: string;
+}
+```
+
+## Get profile (private)
+
+Method: `GET /auth/profile`
+
+Response body:
+```typescript
+{
+  id: string;
+  name: string;
+  description: string;
+  address: string;
+  phoneNumber: string;
+  email: string;
+  photos: Array<string>;
+  links: Array<string>;
+}
+```
+
+## Create animal (private)
+
+Method: `POST /animals/create`
 
 Request body:
 ```typescript
@@ -105,6 +145,9 @@ Request body:
 {
   limit?: number;
   offset?: number;
+  filters?: {
+    shelterId?: string;
+  }
 }
 ```
 
@@ -122,7 +165,7 @@ Response body:
   }[];
 ```
 
-## Delete one animal
+## Delete one animal (private)
 
 Method: `DELETE /animals/ANIMAL_ID`
 
@@ -131,7 +174,7 @@ Response body:
 {}
 ```
 
-## Create shelter
+## Create shelter (hidden)
 
 Method: `POST /shelters`
 
