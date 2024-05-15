@@ -12,16 +12,11 @@ import {
 import { ApiError } from 'src/types';
 import { SheltersService } from './shelters.service';
 import {
-  NewShelterDto,
   ShelterDetailsDto,
   ShelterListRequestDto,
   ShelterListResponseDto,
 } from './shelters.dto';
-import {
-  newShelterDtoToDbo,
-  shelterDetailsDboToDto,
-  shelterListDboToDto,
-} from './shelters.mapper';
+import { shelterDetailsDboToDto, shelterListDboToDto } from './shelters.mapper';
 import { Public } from 'src/auth/decorators/public.decorator';
 
 @Controller('shelters')
@@ -92,29 +87,29 @@ export class SheltersController {
     });
   }
 
-  @Public()
-  @Post()
-  @HttpCode(200)
-  async createOne(
-    @Body() newShelterDto: NewShelterDto,
-    @Res() response: Response,
-  ): Promise<Response<{ id: string } | ApiError>> {
-    let id;
-    try {
-      const newShelterDbo = newShelterDtoToDbo(newShelterDto);
-      id = await this.sheltersService.create(newShelterDbo);
-    } catch (err) {
-      console.log(err);
-      return response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
-        status: HttpStatus.INTERNAL_SERVER_ERROR,
-        message: 'Internal server error',
-      });
-    }
+  // @Public()
+  // @Post()
+  // @HttpCode(200)
+  // async createOne(
+  //   @Body() newShelterDto: NewShelterDto,
+  //   @Res() response: Response,
+  // ): Promise<Response<{ id: string } | ApiError>> {
+  //   let id;
+  //   try {
+  //     const newShelterDbo = newShelterDtoToDbo(newShelterDto);
+  //     id = await this.sheltersService.create(newShelterDbo);
+  //   } catch (err) {
+  //     console.log(err);
+  //     return response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+  //       status: HttpStatus.INTERNAL_SERVER_ERROR,
+  //       message: 'Internal server error',
+  //     });
+  //   }
 
-    const result = { id };
+  //   const result = { id };
 
-    console.log('createOne :: ', result);
+  //   console.log('createOne :: ', result);
 
-    return response.status(HttpStatus.OK).json(result);
-  }
+  //   return response.status(HttpStatus.OK).json(result);
+  // }
 }
