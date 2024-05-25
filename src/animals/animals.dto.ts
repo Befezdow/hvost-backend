@@ -54,8 +54,12 @@ export class AnimalListDto {
   nickname: string;
   photos: Array<string>;
   gender: Gender;
+  species: Species;
   minBirthDate: string;
   maxBirthDate: string;
+  breed: string;
+  color: string;
+  size: Size;
 }
 
 export class AnimalListRequestDto {

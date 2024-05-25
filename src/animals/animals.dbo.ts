@@ -55,8 +55,12 @@ export class AnimalListDbo {
   nickname: string;
   photos: Array<Binary>;
   gender: string;
+  species: string;
   minBirthDate: Date;
   maxBirthDate: Date;
+  breed: string;
+  color: string;
+  size: string;
 }
 
 export class AnimalListFiltersDbo {

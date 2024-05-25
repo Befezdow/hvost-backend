@@ -160,8 +160,12 @@ Response body:
     nickname: string;
     photo: string;
     gender: 'BOY' | 'GIRL';
+    species: 'CAT' | 'DOG';
     minBirthDate: string;
     maxBirthDate: string;
+    breed: string;
+    color: string;
+    size: 'SMALL' | 'MEDIUM' | 'LARGE';
   }[];
 ```
 

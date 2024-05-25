@@ -48,8 +48,12 @@ export function animalListDboToDto(data: AnimalListDbo): AnimalListDto {
     nickname: data.nickname,
     photos: data.photos.map((elem) => elem.toString('base64')),
     gender: data.gender as Gender,
+    species: data.species as Species,
     minBirthDate: data.minBirthDate.toISOString(),
     maxBirthDate: data.maxBirthDate.toISOString(),
+    breed: data.breed,
+    color: data.color,
+    size: data.size as Size,
   };
 }
 
