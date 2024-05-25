@@ -33,6 +33,9 @@ $ npm run start:prod
 Backend URL: `http://localhost:80`<br />
 Mongo URL: `http://localhost:27018`
 
+Before running it in Docker, you need to modify the "src\config.ts" config by replacing the "mongoURI" field value with "mongodb://mongo:27017".
+
+Command to run:
 ```bash
 $ docker compose up
 ```
