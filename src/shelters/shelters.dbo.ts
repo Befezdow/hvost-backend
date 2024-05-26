@@ -1,12 +1,17 @@
 import { Binary, ObjectId } from 'mongodb';
 
+export class PhotoDataDbo {
+  mime: string;
+  data: Binary;
+}
+
 export class NewShelterDbo {
   name: string;
   description: string;
   address: string;
   phoneNumber: string;
   email: string;
-  photos: Array<Binary>;
+  photos: Array<PhotoDataDbo>;
   links: Array<string>;
   login: string;
   password: string;
@@ -18,7 +23,7 @@ export class UpdateShelterDbo {
   address?: string;
   phoneNumber?: string;
   email?: string;
-  photos?: Array<Binary>;
+  photos?: Array<PhotoDataDbo>;
   links?: Array<string>;
   login?: string;
   password?: string;
@@ -31,7 +36,7 @@ export class ShelterDetailsDbo {
   address: string;
   phoneNumber: string;
   email: string;
-  photos: Array<Binary>;
+  photos: Array<PhotoDataDbo>;
   links: Array<string>;
   login: string;
   password: string;
@@ -42,5 +47,5 @@ export class ShelterListDbo {
   name: string;
   address: string;
   phoneNumber: string;
-  photos: Array<Binary>;
+  photos: Array<PhotoDataDbo>;
 }

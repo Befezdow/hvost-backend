@@ -6,7 +6,7 @@ $ npm install
 
 # Running the app
 
-Config file path: `./src/config.ts`. 
+Config file path: `./src/config.ts`.
 There you can set up Mongo URI (field `mongoURI`; default: `mongodb://localhost:27018`) and application port (field `port`; default: `3000`).
 Also, you can configure used database (field `mongoDatabase`) and collection (`animalsCollection`).
 
@@ -36,6 +36,7 @@ Mongo URL: `http://localhost:27018`
 Before running it in Docker, you need to modify the "src\config.ts" config by replacing the "mongoURI" field value with "mongodb://mongo:27017".
 
 Command to run:
+
 ```bash
 $ docker compose up
 ```
@@ -49,6 +50,7 @@ To call private (authorized) methods, the Bearer token is used.
 Method: `POST /auth/login`
 
 Request body:
+
 ```typescript
 {
   login: string;
@@ -57,6 +59,7 @@ Request body:
 ```
 
 Response body:
+
 ```typescript
 {
   accessToken: string;
@@ -69,6 +72,7 @@ Response body:
 Method: `GET /auth/profile`
 
 Response body:
+
 ```typescript
 {
   id: string;
@@ -77,7 +81,10 @@ Response body:
   address: string;
   phoneNumber: string;
   email: string;
-  photos: Array<string>;
+  photos: Array<{
+    mime: string;
+    data: string;
+  }>;
   links: Array<string>;
 }
 ```
@@ -87,6 +94,7 @@ Response body:
 Method: `POST /animals/create`
 
 Request body:
+
 ```typescript
 {
   nickname: string;
@@ -98,12 +106,16 @@ Request body:
   color: string;
   size: 'SMALL' | 'MEDIUM' | 'LARGE';
   description: string;
-  photos: Array<string>;
+  photos: Array<{
+    mime: string;
+    data: string;
+  }>;
   shelterId: string;
 }
 ```
 
 Response body:
+
 ```typescript
 {
   id: string;
@@ -115,6 +127,7 @@ Response body:
 Method: `GET /animals/ANIMAL_ID`
 
 Response body:
+
 ```typescript
 {
   id: string;
@@ -127,7 +140,10 @@ Response body:
   color: string;
   size: 'SMALL' | 'MEDIUM' | 'LARGE';
   description: string;
-  photos: Array<string>;
+  photos: Array<{
+    mime: string;
+    data: string;
+  }>;
   shelter: {
     id: string;
     name: string;
@@ -135,7 +151,7 @@ Response body:
     phoneNumber: string;
     email: string;
     links: Array<string>;
-  };
+  }
 }
 ```
 
@@ -144,6 +160,7 @@ Response body:
 Method: `POST /animals`
 
 Request body:
+
 ```typescript
 {
   limit?: number;
@@ -155,6 +172,7 @@ Request body:
 ```
 
 Response body:
+
 ```typescript
 {
   totalAmount: number;
@@ -177,8 +195,10 @@ Response body:
 Method: `DELETE /animals/ANIMAL_ID`
 
 Response body:
+
 ```typescript
-{}
+{
+}
 ```
 
 ## Create shelter (hidden)
@@ -186,6 +206,7 @@ Response body:
 Method: `POST /shelters`
 
 Request body:
+
 ```typescript
 {
   name: string;
@@ -193,7 +214,10 @@ Request body:
   address: string;
   phoneNumber: string;
   email: string;
-  photos: Array<string>;
+  photos: Array<{
+    mime: string;
+    data: string;
+  }>;
   links: Array<string>;
   login: string;
   password: string;
@@ -201,6 +225,7 @@ Request body:
 ```
 
 Response body:
+
 ```typescript
 {
   id: string;
@@ -212,6 +237,7 @@ Response body:
 Method: `GET /shelters/SHELTER_ID`
 
 Response body:
+
 ```typescript
 {
   id: string;
@@ -220,7 +246,10 @@ Response body:
   address: string;
   phoneNumber: string;
   email: string;
-  photos: Array<string>;
+  photos: Array<{
+    mime: string;
+    data: string;
+  }>;
   links: Array<string>;
 }
 ```
@@ -230,6 +259,7 @@ Response body:
 Method: `POST /shelters`
 
 Request body:
+
 ```typescript
 {
   limit?: number;
@@ -238,6 +268,7 @@ Request body:
 ```
 
 Response body:
+
 ```typescript
 {
   totalAmount: number;
@@ -246,7 +277,10 @@ Response body:
     name: string;
     address: string;
     phoneNumber: string;
-    photos: Array<string>;
+    photos: Array<{
+    mime: string;
+    data: string;
+  }>;
   }[];
 ```
 

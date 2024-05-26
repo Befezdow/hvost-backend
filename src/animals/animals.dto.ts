@@ -14,6 +14,11 @@ export enum Size {
   LARGE = 'LARGE',
 }
 
+export class PhotoDataDto {
+  mime: string;
+  data: string;
+}
+
 export class NewAnimalDto {
   nickname: string;
   gender: Gender;
@@ -24,7 +29,7 @@ export class NewAnimalDto {
   color: string;
   size: Size;
   description: string;
-  photos: Array<string>;
+  photos: Array<PhotoDataDto>;
 }
 
 export class AnimalDetailsDto {
@@ -38,7 +43,7 @@ export class AnimalDetailsDto {
   color: string;
   size: Size;
   description: string;
-  photos: Array<string>;
+  photos: Array<PhotoDataDto>;
   shelter: {
     id: string;
     name: string;
@@ -52,7 +57,7 @@ export class AnimalDetailsDto {
 export class AnimalListDto {
   id: string;
   nickname: string;
-  photos: Array<string>;
+  photos: Array<PhotoDataDto>;
   gender: Gender;
   species: Species;
   minBirthDate: string;

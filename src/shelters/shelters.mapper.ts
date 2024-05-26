@@ -20,7 +20,10 @@ export function shelterDetailsDboToDto(
     address: data.address,
     phoneNumber: data.phoneNumber,
     email: data.email,
-    photos: data.photos.map((elem) => elem.toString('base64')),
+    photos: data.photos.map((elem) => ({
+      mime: elem.mime,
+      data: elem.data.toString('base64'),
+    })),
     links: data.links,
   };
 }
@@ -31,7 +34,10 @@ export function shelterListDboToDto(data: ShelterListDbo): ShelterListDto {
     name: data.name,
     address: data.address,
     phoneNumber: data.phoneNumber,
-    photos: data.photos.map((elem) => elem.toString('base64')),
+    photos: data.photos.map((elem) => ({
+      mime: elem.mime,
+      data: elem.data.toString('base64'),
+    })),
   };
 }
 
@@ -42,7 +48,10 @@ export function newShelterDtoToDbo(data: NewShelterDto): NewShelterDbo {
     address: data.address,
     phoneNumber: data.phoneNumber,
     email: data.email,
-    photos: data.photos.map((elem) => Binary.createFromBase64(elem)),
+    photos: data.photos.map((elem) => ({
+      mime: elem.mime,
+      data: Binary.createFromBase64(elem.data),
+    })),
     links: data.links,
     login: data.login,
     password: data.password,

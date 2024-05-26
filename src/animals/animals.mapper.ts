@@ -30,7 +30,10 @@ export function animalDetailsDboToDto(
     color: data.color,
     size: data.size as Size,
     description: data.description,
-    photos: data.photos.map((elem) => elem.toString('base64')),
+    photos: data.photos.map((elem) => ({
+      mime: elem.mime,
+      data: elem.data.toString('base64'),
+    })),
     shelter: {
       id: data.shelter.id.toString(),
       name: data.shelter.name,
@@ -46,7 +49,10 @@ export function animalListDboToDto(data: AnimalListDbo): AnimalListDto {
   return {
     id: data._id.toString(),
     nickname: data.nickname,
-    photos: data.photos.map((elem) => elem.toString('base64')),
+    photos: data.photos.map((elem) => ({
+      mime: elem.mime,
+      data: elem.data.toString('base64'),
+    })),
     gender: data.gender as Gender,
     species: data.species as Species,
     minBirthDate: data.minBirthDate.toISOString(),
@@ -86,7 +92,10 @@ export function newAnimalDtoToDbo(
     color: data.color,
     size: data.size as Size,
     description: data.description,
-    photos: data.photos.map((elem) => Binary.createFromBase64(elem)),
+    photos: data.photos.map((elem) => ({
+      mime: elem.mime,
+      data: Binary.createFromBase64(elem.data),
+    })),
     shelterId: new ObjectId(shelterId),
   };
 }
