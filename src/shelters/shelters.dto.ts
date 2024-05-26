@@ -26,6 +26,14 @@ export class ShelterDetailsDto {
   links: Array<string>;
 }
 
+export class ShortShelterDto {
+  id: string;
+  name: string;
+  address: string;
+  phoneNumber: string;
+  email: string;
+}
+
 export class ShelterListDto {
   id: string;
   name: string;

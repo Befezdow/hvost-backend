@@ -1,7 +1,7 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { SheltersService } from 'src/shelters/shelters.service';
-import { shelterDetailsDboToDto } from 'src/shelters/shelters.mapper';
+import { shortShelterDboToDto } from 'src/shelters/shelters.mapper';
 
 @Injectable()
 export class AuthService {
@@ -19,7 +19,7 @@ export class AuthService {
     if (shelter?.password !== pass) {
       throw new UnauthorizedException();
     }
-    const payload = { user: shelterDetailsDboToDto(shelter) };
+    const payload = { user: shortShelterDboToDto(shelter) };
     const token = await this.jwtService.signAsync(payload);
     const { exp: rawExpirationTime } = this.jwtService.decode(token);
     return { token, expiresAt: new Date(rawExpirationTime * 1000) };

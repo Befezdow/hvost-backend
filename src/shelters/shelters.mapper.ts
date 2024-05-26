@@ -8,6 +8,7 @@ import {
   NewShelterDto,
   ShelterDetailsDto,
   ShelterListDto,
+  ShortShelterDto,
 } from './shelters.dto';
 
 export function shelterDetailsDboToDto(
@@ -25,6 +26,16 @@ export function shelterDetailsDboToDto(
       data: elem.data.toString('base64'),
     })),
     links: data.links,
+  };
+}
+
+export function shortShelterDboToDto(data: ShelterDetailsDbo): ShortShelterDto {
+  return {
+    id: data._id.toString(),
+    name: data.name,
+    address: data.address,
+    phoneNumber: data.phoneNumber,
+    email: data.email,
   };
 }
 
