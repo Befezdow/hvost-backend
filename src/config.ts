@@ -5,4 +5,5 @@ export const config = {
   mongoDatabase: 'hvost',
   animalsCollection: 'animals',
   sheltersCollection: 'shelters',
+  authTimeout: '30m',
 };
